@@ -1,41 +1,22 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import { get } from 'svelte/store';
-	import { cells } from './utils/store';
 	import HomeIcon from './HomeIcon.svelte';
+	import generateTreesRandomly from './utils/generateTreesRandomly';
 	import type { CellCoordinates } from './utils/types.d';
 
 	export let operatingArea: CellCoordinates[] = [];
 
-	const plantTree = () => {
-		const emptyFields = operatingArea.filter(
-			({ column, row }) => get(cells)[row][column].isAvailable
-		);
+	function sleep(ms: number) {
+		return new Promise((resolve) => setTimeout(resolve, ms));
+	}
 
-		if (!emptyFields) {
-			return null;
-		}
-
-		const randomCell = emptyFields[Math.floor(Math.random() * emptyFields.length)];
-
-		const data = get(cells);
-
-		cells.set({
-			...data,
-			[randomCell.row]: {
-				...data[randomCell.row],
-				[randomCell.column]: {
-					...data[randomCell.row][randomCell.column],
-					isAvailable: false,
-					content: 'tree'
-				}
-			}
-		});
-
-		setTimeout(plantTree, 5000);
+	const plantTree = async (ms: number) => {
+		await sleep(ms);
+		generateTreesRandomly({ cells: operatingArea });
+		plantTree(5000);
 	};
 
-	onMount(plantTree);
+	onMount(() => plantTree(15000));
 </script>
 
 <HomeIcon />

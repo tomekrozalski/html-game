@@ -3,6 +3,7 @@
 	import calculateHighlightedCells from './utils/calculateHighlightedCells';
 	import generateBuildingCell from './utils/generateBuildingCell';
 	import generateOperatingArea from './utils/generateOperatingArea';
+	import generateTreesRandomly from './utils/generateTreesRandomly';
 	import Forester from './Forester.svelte';
 	import { cells } from './utils/store';
 	import type { Board, BuldingCell, CellCoordinates, HighlightedCells } from './utils/types.d';
@@ -15,18 +16,16 @@
 	const columns = new Array(board.width).fill('');
 	const rows = new Array(board.height).fill('');
 
-	const generateTrees = () => {
-		$cells[2][30].isAvailable = false;
-		$cells[2][30].content = 'tree';
-
-		$cells[6][21].isAvailable = false;
-		$cells[6][21].content = 'tree';
-	};
-
 	let mounted = false;
 
-	onMount(() => {
-		const allCells = rows.reduce((acc, _, row) => {
+	const createBoardCells = () => {
+		const updatedCells: {
+			[row: number]: {
+				[columnn: number]: {
+					isAvailable: boolean;
+				};
+			};
+		} = rows.reduce((acc, _, row) => {
 			acc[row] = {};
 
 			columns.forEach((_, column) => {
@@ -36,10 +35,13 @@
 			return acc;
 		}, {});
 
-		cells.set(allCells);
+		cells.set(updatedCells);
 
-		generateTrees();
+		generateTreesRandomly({ amount: 5 });
+	};
 
+	onMount(() => {
+		createBoardCells();
 		mounted = true;
 	});
 
