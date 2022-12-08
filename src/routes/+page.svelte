@@ -1,5 +1,5 @@
 <script>
-	import Table from './Table.svelte';
+	import Board from '$lib/Board/Board.svelte';
 </script>
 
 <main>
@@ -11,7 +11,7 @@
 		technologies.
 	</p>
 
-	<Table />
+	<Board height={40} width={50} />
 </main>
 
 <style>

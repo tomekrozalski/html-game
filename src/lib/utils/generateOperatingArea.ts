@@ -1,11 +1,12 @@
+import { get } from 'svelte/store';
+import { board } from '$lib/stores';
+import type { CellCoordinates, BuildingSize, OperatingAreaSize } from '$types/types.d';
 import generateCube from './generateCube';
-import type { Board, CellCoordinates } from './types.d';
 
 const generateOperatingArea = (
-	board: Board,
 	{ column, row }: CellCoordinates,
-	areaSize: 8 | 12 = 8,
-	buildingSize: 3 | 5 = 3
+	areaSize: OperatingAreaSize = 8,
+	buildingSize: BuildingSize = 3
 ): CellCoordinates[] => {
 	const distance = (buildingSize - 1) / 2;
 	const startingCell = { column: column - distance - areaSize, row: row - distance - areaSize };
@@ -18,6 +19,7 @@ const generateOperatingArea = (
 		.map((_, index) => startingCell.row + index);
 
 	const buildingCells = generateCube({ column, row }, buildingSize);
+	const { height, width } = get(board);
 
 	return rows
 		.map((r) => columns.map((c) => ({ column: c, row: r })))
@@ -26,8 +28,8 @@ const generateOperatingArea = (
 			(selectedCell) =>
 				selectedCell.column >= 0 &&
 				selectedCell.row >= 0 &&
-				selectedCell.column < board.width &&
-				selectedCell.row < board.height
+				selectedCell.column < width &&
+				selectedCell.row < height
 		)
 		.filter(
 			(selectedCell) =>

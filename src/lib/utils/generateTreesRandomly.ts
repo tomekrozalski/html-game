@@ -1,7 +1,6 @@
 import { get } from 'svelte/store';
-import { cells } from './store';
-import generateBoardCellsArray from './generateBoardCellsArray';
-import type { CellCoordinates } from './types.d';
+import { cells, cellsArray } from '$lib/stores/board';
+import type { CellCoordinates } from '$types/types.d';
 
 type GenerateTreeRandomlyProps = {
 	amount?: number;
@@ -35,7 +34,7 @@ const generateSingleTreeRandomly = (operatingAreaCells: CellCoordinates[]) => {
 
 const generateTreesRandomly = ({
 	amount = 1,
-	cells = generateBoardCellsArray()
+	cells = get(cellsArray)
 }: GenerateTreeRandomlyProps) => {
 	for (let i = 0; i < amount; i = i + 1) {
 		generateSingleTreeRandomly(cells);

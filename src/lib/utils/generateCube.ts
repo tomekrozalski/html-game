@@ -1,6 +1,9 @@
-import type { CellCoordinates } from './types.d';
+import type { BuildingSize, CellCoordinates } from '$types/types.d';
 
-const generateCube = ({ column, row }: CellCoordinates, size: 3 | 5 = 3): CellCoordinates[] => {
+const generateCube = (
+	{ column, row }: CellCoordinates,
+	size: BuildingSize = 3
+): CellCoordinates[] => {
 	const distance = (size - 1) / 2;
 	const startingCell = { column: column - distance, row: row - distance };
 

@@ -1,10 +1,12 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
-	import HomeIcon from './HomeIcon.svelte';
-	import generateTreesRandomly from './utils/generateTreesRandomly';
-	import type { CellCoordinates } from './utils/types.d';
+	import HomeIcon from '$lib/assets/icons/HomeIcon.svelte';
+	import { buildings } from '$lib/stores';
+	import generateTreesRandomly from '$lib/utils/generateTreesRandomly';
+	import type { BuildingData } from '$types/types';
 
-	export let operatingArea: CellCoordinates[] = [];
+	export let id: string;
+	const { operatingArea } = $buildings.find((props) => props.id === id) as BuildingData;
 
 	function sleep(ms: number) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
